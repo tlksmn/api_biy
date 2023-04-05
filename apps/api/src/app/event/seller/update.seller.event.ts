@@ -1,4 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { EventHandleI } from '../event.handle.interface';
 
 @Injectable()
-export class UpdateSellerEvent {}
+export class UpdateSellerEvent implements EventHandleI {
+  handle(payload) {
+    console.log(payload);
+  }
+}

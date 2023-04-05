@@ -28,3 +28,8 @@ export enum RivalConfigRoute {
   path = 'rival-config',
   update = 'update',
 }
+
+export enum EventRoute {
+  addSeller = 'add-seller',
+  updateSeller = 'update-seller',
+}

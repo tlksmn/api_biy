@@ -1,14 +1,8 @@
-import { Cache } from 'cache-manager';
 import { OnEvent } from '@nestjs/event-emitter';
 import { Repository } from 'typeorm';
 import { CityEntity, cityListConstants } from '@biy/database';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  CACHE_MANAGER,
-  Inject,
-  Injectable,
-  OnModuleInit,
-} from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import {
   AddSellerEventPayload,
   EventRoute,
@@ -21,7 +15,6 @@ import { UpdateSellerEvent } from './update.seller.event';
 @Injectable()
 export class MainSellerEvent implements OnModuleInit {
   constructor(
-    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
     private readonly addSellerEvent: AddSellerEvent,
     private readonly updateSellerEvent: UpdateSellerEvent,
     @InjectRepository(CityEntity)
@@ -59,12 +52,11 @@ export class MainSellerEvent implements OnModuleInit {
   @OnEvent(EventRoute.addSeller)
   async addSeller(payload: AddSellerEventPayload) {
     try {
-      const token: string = await this.cacheManager.get(payload.token);
-      await this.addSellerEvent.handle({ ...payload, token });
-      console.log('completed');
+      await this.addSellerEvent.handle(payload);
     } catch (e) {
       console.log(e);
     }
+    console.log('completed!');
   }
 
   @OnEvent(EventRoute.updateSeller)

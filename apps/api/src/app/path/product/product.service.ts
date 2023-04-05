@@ -12,6 +12,8 @@ export class ProductService {
   ) {}
 
   async getList(user: UserEntity, data: ProductGetDto) {
+    const take = +data.take || 10;
+    const page = +data.page || 1;
     const available =
       data.available?.length > 0
         ? data.available === 'true'
@@ -24,8 +26,8 @@ export class ProductService {
       relations: {
         rivalConfigs: { city: true, pointConfigs: { point: true } },
       },
-      take: data.take || 10,
-      skip: (data.page - 1) * data.take,
+      take: take,
+      skip: (page - 1) * take,
       order: {
         id: 'asc',
         rivalConfigs: {
@@ -37,8 +39,8 @@ export class ProductService {
       },
     });
     return {
-      page: data.page,
-      take: data.take,
+      page: page,
+      take: take,
       total: products[1],
       list: products[0],
     };

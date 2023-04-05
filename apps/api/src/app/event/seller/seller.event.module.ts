@@ -14,7 +14,7 @@ import {
   SellerEntity,
   UserEntity,
 } from '@biy/database';
-import { KaspiModule } from '../../api/kaspi/kaspi.module';
+import { KaspiModule } from '../../mp/kaspi/kaspi.module';
 
 @Module({
   providers: [MainSellerEvent, AddSellerEvent, UpdateSellerEvent],

@@ -15,7 +15,7 @@ import {
   UserEntity,
 } from '@biy/database';
 
-import { KaspiService } from '../../api/kaspi/kaspi.service';
+import { KaspiService } from '../../mp/kaspi/kaspi.service';
 import { EventHandleI } from '../event.handle.interface';
 
 @Injectable()
@@ -44,6 +44,7 @@ export class AddSellerEvent implements EventHandleI {
     const user = await this.userRepository.findOne({
       where: { id: payload.userId },
     });
+
     if (!user) throw new HttpException('user not found', HttpStatus.NOT_FOUND);
     const [seller, productCount] = await Promise.all([
       this.kaspiService.getSellerInfo({ token: payload.token }),

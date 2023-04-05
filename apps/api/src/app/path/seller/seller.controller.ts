@@ -12,7 +12,7 @@ export class SellerController {
 
   @Post(SellerRoute.add)
   addSeller(@Body() data: AddSellerDto, @User() user: UserEntity) {
-    return;
+    return this.sellerService.addSeller(data, user);
   }
 
   @Get(SellerRoute.byId)

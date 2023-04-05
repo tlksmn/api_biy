@@ -1,14 +1,14 @@
+import { Cache } from 'cache-manager';
+import { OnEvent } from '@nestjs/event-emitter';
+import { Repository } from 'typeorm';
+import { CityEntity, cityListConstants } from '@biy/database';
+import { InjectRepository } from '@nestjs/typeorm';
 import {
   CACHE_MANAGER,
   Inject,
   Injectable,
   OnModuleInit,
 } from '@nestjs/common';
-import { Cache } from 'cache-manager';
-import { OnEvent } from '@nestjs/event-emitter';
-import { Repository } from 'typeorm';
-import { CityEntity, cityListConstants } from '@biy/database';
-import { InjectRepository } from '@nestjs/typeorm';
 import {
   AddSellerEventPayload,
   EventRoute,

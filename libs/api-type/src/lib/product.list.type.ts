@@ -1,4 +1,4 @@
-import { StateE } from '@full-biy/db';
+import { StateE } from './state.enum';
 
 export type AddressT = {
   streetName: string;

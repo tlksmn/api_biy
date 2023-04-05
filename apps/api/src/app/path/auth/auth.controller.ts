@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  Req,
-  Res,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
 import { UserEntity } from '@biy/database';
 import { AuthRoute, SignUpDto } from '@biy/dto';
 import { Response } from 'express';

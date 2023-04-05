@@ -1,7 +1,8 @@
-import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { ProductGetDto, ProductRoute } from '@biy/dto';
 import { UserEntity } from '@biy/database';
 import { ProductService } from './product.service';
+
 import { JwtGuard } from '../auth/guard/jwt.guard';
 import { User } from '../auth/user/user.decorator';
 

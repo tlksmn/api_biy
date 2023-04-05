@@ -1,10 +1,10 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { RivalConfigRoute, UpdateRivalConfigDto } from '@biy/dto';
+import { UserEntity } from '@biy/database';
 
 import { RivalConfigService } from './rivalConfig.service';
 import { JwtGuard } from '../auth/guard/jwt.guard';
 import { User } from '../auth/user/user.decorator';
-import { UserEntity } from '@biy/database';
 
 @Controller(RivalConfigRoute.path)
 @UseGuards(JwtGuard)

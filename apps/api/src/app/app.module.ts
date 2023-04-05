@@ -2,14 +2,10 @@ import { Module } from '@nestjs/common';
 import { DataBaseModule } from '@biy/database';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { PathModule } from './path/path.module';
 import { EventModule } from './event/event.module';
 
 @Module({
-  controllers: [AppController],
-  providers: [AppService],
   imports: [
     PathModule,
     EventModule,

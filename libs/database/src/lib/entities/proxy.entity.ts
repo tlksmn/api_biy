@@ -4,20 +4,23 @@ import { AEntity } from './a.entity';
 @Entity('proxy')
 export class ProxyEntity extends AEntity {
   @Column()
-  ip: string;
+  host: string;
 
   @Column()
-  port: string;
+  port: number;
 
   @Column()
+  protocol: string;
+
+  @Column({ nullable: true })
   username: string;
 
-  @Column()
+  @Column({ nullable: true })
   password: string;
 
-  @Column()
+  @Column({ nullable: true })
   country: string;
 
-  @Column({ type: 'boolean' })
+  @Column({ type: 'boolean', default: true })
   active: boolean;
 }

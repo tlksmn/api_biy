@@ -33,18 +33,21 @@ export class RivalJob implements CronI {
       const products = await this.getProductList(seller.id);
       for (const product of products) {
         for (const rivalConfig of product.rivalConfigs) {
-          //-- todo --
-          // fetch proxy agent
-          //-- todo --
-          temp++;
-          rivalConfig.rivalSeller = await this.kaspiApi.getFoo(
-            +product.sku,
-            rivalConfig.city.id
-          );
-          rivalAcc.push(rivalConfig);
-          //--todo
-          // change price depends to min price
-          //--todo
+          try {
+            const response = await this.kaspiApi.get(
+              +product.sku,
+              rivalConfig.city.id
+            );
+            temp++;
+            rivalConfig.rivalSeller = response;
+            rivalAcc.push(rivalConfig);
+            //--todo
+            // change price depends to min price
+            //--todo
+          } catch (e) {
+            console.log(e);
+            continue;
+          }
         }
       }
 

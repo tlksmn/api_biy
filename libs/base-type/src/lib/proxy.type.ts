@@ -1,8 +1,9 @@
 import { AT } from './a.type';
 
 export type ProxyT = AT & {
-  ip: string;
+  host: string;
   port: string;
+  protocol: string;
   username: string;
   password: string;
   country: string;

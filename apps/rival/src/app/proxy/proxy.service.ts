@@ -43,7 +43,7 @@ export class ProxyService implements OnModuleInit {
 
   getNext() {
     const index = this.proxyIndex;
-    if (index > this.proxyList.length) {
+    if (index >= this.proxyList.length) {
       this.proxyIndex = this.proxyList.length - index;
     }
     const proxy = this.proxyList[this.proxyIndex];

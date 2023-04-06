@@ -36,7 +36,8 @@ export class RivalJob implements CronI {
           try {
             const response = await this.kaspiApi.get(
               +product.sku,
-              rivalConfig.city.id
+              rivalConfig.city.id,
+              product.name
             );
             temp++;
             rivalConfig.rivalSeller = response;
@@ -46,7 +47,6 @@ export class RivalJob implements CronI {
             //--todo
           } catch (e) {
             console.log(e);
-            continue;
           }
         }
       }

@@ -33,3 +33,9 @@ export enum EventRoute {
   addSeller = 'add-seller',
   updateSeller = 'update-seller',
 }
+
+export enum FileRoute {
+  path = 'file',
+  xml = 'xml',
+  xlsx = 'xlsx',
+}

@@ -1,9 +1,10 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { AddSellerDto, SellerRoute, UpdateSellerDto } from '@biy/dto';
+import { UserEntity } from '@biy/database';
+
 import { SellerService } from './seller.service';
 import { JwtGuard } from '../auth/guard/jwt.guard';
 import { User } from '../auth/user/user.decorator';
-import { UserEntity } from '@biy/database';
 
 @Controller(SellerRoute.path)
 @UseGuards(JwtGuard)

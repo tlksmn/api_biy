@@ -39,3 +39,10 @@ export enum FileRoute {
   xml = 'xml',
   xlsx = 'xlsx',
 }
+
+export enum ExtensionRoute {
+  path = 'ext',
+  list = 'list',
+  activate = 'activate',
+  update = 'update',
+}

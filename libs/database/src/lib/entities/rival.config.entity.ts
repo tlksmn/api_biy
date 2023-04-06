@@ -4,6 +4,7 @@ import { SellerEntity } from './seller.entity';
 import { ProductEntity } from './product.entity';
 import { CityEntity } from './city.entity';
 import { PointConfigEntity } from './point.config.entity';
+import { PriceListApiT } from '@biy/api-type';
 
 @Entity('rival_config')
 @Unique('product_city_seller', ['product', 'city', 'seller'])
@@ -15,7 +16,7 @@ export class RivalConfigEntity extends AEntity {
   minPrice: number;
 
   @Column({ type: 'json', nullable: true })
-  rivalSeller: any;
+  rivalSeller: PriceListApiT;
 
   //---- relations ----
 

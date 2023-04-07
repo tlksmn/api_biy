@@ -16,8 +16,8 @@ async function bootstrap() {
   app.use(helmet());
   app.use(
     rateLimit({
-      windowMs: 60 * 60 * 1000, // 30 minutes
-      max: 12, // limit each IP to 5 requests per windowMs
+      windowMs: 2 * 60 * 1000, // 30 minutes
+      max: 2, // limit each IP to 5 requests per windowMs
     })
   );
   app.useGlobalPipes(

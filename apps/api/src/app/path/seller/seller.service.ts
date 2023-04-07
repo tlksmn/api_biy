@@ -35,8 +35,13 @@ export class SellerService {
     return true;
   }
 
-  getList(user: UserEntity) {
-    return this.sellerRepository.find({ where: { user: { id: user.id } } });
+  async getList(user: UserEntity) {
+    const response = await this.sellerRepository.findAndCount({
+      where: { user: { id: user.id } },
+      relations: { cities: true, count: true, points: true },
+      order: { id: 'ASC' },
+    });
+    return { total: response[1], list: response[0] };
   }
 
   getById(id: number, user: UserEntity) {

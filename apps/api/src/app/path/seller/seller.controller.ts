@@ -11,6 +11,11 @@ import { User } from '../auth/user/user.decorator';
 export class SellerController {
   constructor(private readonly sellerService: SellerService) {}
 
+  @Get(SellerRoute.getList)
+  getList(@User() user: UserEntity) {
+    return this.sellerService.getList(user);
+  }
+
   @Post(SellerRoute.add)
   addSeller(@Body() data: AddSellerDto, @User() user: UserEntity) {
     return this.sellerService.addSeller(data, user);
@@ -19,11 +24,6 @@ export class SellerController {
   @Get(SellerRoute.byId)
   getById(@Param('sellerId') sellerId: number, @User() user: UserEntity) {
     return this.sellerService.getById(sellerId, user);
-  }
-
-  @Get(SellerRoute.getList)
-  getList(@User() user: UserEntity) {
-    return this.sellerService.getList(user);
   }
 
   @Post(SellerRoute.update)

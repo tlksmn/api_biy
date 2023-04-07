@@ -6,7 +6,6 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import helmet from 'helmet';
-import csurf from 'csurf';
 import rateLimit from 'express-rate-limit';
 
 import { AppModule } from './app/app.module';
@@ -31,7 +30,6 @@ async function bootstrap() {
     })
   );
   app.use(helmet());
-  app.use(csurf());
   app.use(
     rateLimit({
       windowMs: 2 * 60 * 1000, // 2 minutes

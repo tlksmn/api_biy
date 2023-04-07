@@ -24,7 +24,7 @@ export function postgresConfig(): TypeOrmModuleAsyncOptions {
       database: configService.get('POSTGRES_DATABASE'),
       synchronize: true,
       // dropSchema: true,
-      logging: true,
+      // logging: true,
       entities: [
         PointConfigEntity,
         CityEntity,

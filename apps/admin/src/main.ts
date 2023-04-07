@@ -2,14 +2,15 @@
  * This is not a production server yet!
  * This is only a minimal backend to get started.
  */
+
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import * as cookieParser from 'cookie-parser';
-import * as process from 'process';
 import helmet from 'helmet';
+import csurf from 'csurf';
 import rateLimit from 'express-rate-limit';
 
 import { AppModule } from './app/app.module';
+import * as process from 'process';
 
 const corsOptions = {
   origin:
@@ -30,17 +31,16 @@ async function bootstrap() {
     })
   );
   app.use(helmet());
+  app.use(csurf());
   app.use(
     rateLimit({
       windowMs: 2 * 60 * 1000, // 2 minutes
-      max: 120, // limit each IP to 100 requests per windowMs
+      max: 10, // limit each IP to 10 requests per windowMs
     })
   );
-  app.use(cookieParser());
   app.enableCors(corsOptions);
-
-  await app.listen(3000);
-  Logger.log(`🚀 Api application is running on: http://localhost:3000/ `);
+  await app.listen(3003);
+  Logger.log(`🚀 Admin application is running on: http://localhost:3003`);
 }
 
 bootstrap().then();

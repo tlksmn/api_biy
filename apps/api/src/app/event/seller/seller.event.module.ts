@@ -1,8 +1,5 @@
 import { Module } from '@nestjs/common';
-
-import { AddSellerEvent } from './add.seller.event';
-import { UpdateSellerEvent } from './update.seller.event';
-import { MainSellerEvent } from './main.seller.event';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   CityEntity,
@@ -14,6 +11,10 @@ import {
   SellerEntity,
   UserEntity,
 } from '@biy/database';
+
+import { AddSellerEvent } from './add.seller.event';
+import { UpdateSellerEvent } from './update.seller.event';
+import { MainSellerEvent } from './main.seller.event';
 import { KaspiModule } from '../../mp/kaspi/kaspi.module';
 
 @Module({
@@ -30,6 +31,7 @@ import { KaspiModule } from '../../mp/kaspi/kaspi.module';
       UserEntity,
     ]),
     KaspiModule,
+    ConfigModule,
   ],
 })
 export class SellerEventModule {}

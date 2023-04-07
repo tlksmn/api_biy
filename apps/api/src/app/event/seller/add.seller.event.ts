@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductCountApiT, ResponseAPI, SellerApiT } from '@biy/api-type';
-import { AddSellerEventPayload } from '@biy/dto';
+import { AddSellerDto, AddSellerEventPayload } from '@biy/dto';
 import {
   CityEntity,
   PointConfigEntity,
@@ -17,6 +17,8 @@ import {
 
 import { KaspiService } from '../../mp/kaspi/kaspi.service';
 import { EventHandleI } from '../event.handle.interface';
+import { ConfigService } from '@nestjs/config';
+import { Rabbit } from 'crypto-js';
 
 @Injectable()
 export class AddSellerEvent implements EventHandleI {
@@ -37,7 +39,8 @@ export class AddSellerEvent implements EventHandleI {
     @InjectRepository(SellerEntity)
     private readonly sellerRepository: Repository<SellerEntity>,
     @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>
+    private readonly userRepository: Repository<UserEntity>,
+    private readonly configService: ConfigService
   ) {}
 
   async handle(payload: AddSellerEventPayload) {
@@ -46,22 +49,32 @@ export class AddSellerEvent implements EventHandleI {
     });
 
     if (!user) throw new HttpException('user not found', HttpStatus.NOT_FOUND);
+
     const [seller, productCount] = await Promise.all([
       this.kaspiService.getSellerInfo({ token: payload.token }),
       this.kaspiService.getProductCount({ token: payload.token }),
     ]);
-    const data = await this.saveSellerAndCount(seller, productCount, user);
+
+    const data = await this.saveSellerAndCount(
+      seller,
+      productCount,
+      user,
+      payload.data
+    );
+
     const responseOffers = await this.kaspiService.getProductList(
       { token: payload.token },
       { limit: 1000 }
     );
+
     await this.saveList(responseOffers, data);
   }
 
   private async saveSellerAndCount(
     sellerResponse: SellerApiT,
     countResponse: ProductCountApiT,
-    user: UserEntity
+    user: UserEntity,
+    data: AddSellerDto
   ) {
     let seller = await this.sellerRepository.findOne({
       where: { sysId: sellerResponse.affiliateId },
@@ -69,12 +82,17 @@ export class AddSellerEvent implements EventHandleI {
     if (seller)
       throw new HttpException('seller already defined', HttpStatus.BAD_REQUEST);
 
+    const encryptedPassword = Rabbit.encrypt(
+      data.password,
+      this.configService.get('RABBIT_PASSWORD')
+    ).toString();
+
     const sellerTemp = this.sellerRepository.create({
       email: sellerResponse.orderProcessingManager.email,
       fullName: `${sellerResponse.orderProcessingManager.name} | ${sellerResponse.orderProcessingManager.firstName} ${sellerResponse.orderProcessingManager.lastName}`,
       logoUrl: sellerResponse.logoUrl,
       phone: sellerResponse.orderProcessingManager.phone,
-      password: 'hashed_password_should_be_here_but_not_today:)',
+      password: encryptedPassword,
       sysId: sellerResponse.affiliateId,
       username: sellerResponse.name,
       user: { id: user.id },

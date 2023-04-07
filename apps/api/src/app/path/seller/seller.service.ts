@@ -30,6 +30,7 @@ export class SellerService {
     this.eventEmitter.emit(EventRoute.addSeller, {
       token,
       userId: user.id,
+      data,
     });
     return true;
   }

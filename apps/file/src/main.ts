@@ -11,7 +11,7 @@ import { AppModule } from './app/app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   await app.listen(3002);
-  Logger.log(`🚀 File Application is running on: http://localhost:3002`);
+  Logger.log(`🚀 File application is running on: http://localhost:3002`);
 }
 
-bootstrap();
+bootstrap().then();

@@ -3,15 +3,27 @@
  * This is only a minimal backend to get started.
  */
 
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app/app.module';
+import * as process from 'process';
+
+const corsOptions = {
+  origin:
+    process.env.NODE_ENV === 'dev'
+      ? 'http://localhost:4200'
+      : 'https://mp.biy.kz',
+  credentials: true,
+  optionSuccessStatus: 200,
+};
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   await app.listen(3001);
-  Logger.log(`🚀 Extension Application is running on: http://localhost:3001/`);
+  app.enableCors(corsOptions);
+  app.useGlobalPipes(new ValidationPipe());
+  Logger.log(`🚀 Extension application is running on: http://localhost:3001/`);
 }
 
-bootstrap();
+bootstrap().then();

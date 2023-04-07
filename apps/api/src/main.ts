@@ -13,7 +13,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.use(cookieParser());
   await app.listen(3000);
-  Logger.log(`🚀 Api Application is running on: http://localhost:3000/ `);
+  Logger.log(`🚀 Api application is running on: http://localhost:3000/ `);
 }
 
 bootstrap().then();

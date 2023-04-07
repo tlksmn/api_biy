@@ -1,4 +1,5 @@
 import { IsNotEmpty } from 'class-validator';
+import { PriceListApiT } from '@biy/api-type';
 
 export class UpdateRivalDto {
   @IsNotEmpty()
@@ -8,5 +9,5 @@ export class UpdateRivalDto {
   sellerId: number;
 
   @IsNotEmpty()
-  data: number;
+  data: PriceListApiT;
 }

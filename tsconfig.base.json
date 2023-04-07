@@ -17,8 +17,9 @@
     "paths": {
       "@biy/api-type": ["libs/api-type/src/index.ts"],
       "@biy/base-type": ["libs/base-type/src/index.ts"],
+      "@biy/common": ["libs/common/src/index.ts"],
       "@biy/database": ["libs/database/src/index.ts"],
-      "@biy/dto": ["libs/dto/src/index.ts"],
+      "@biy/dto": ["libs/dto/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

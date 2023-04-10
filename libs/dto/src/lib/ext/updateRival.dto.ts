@@ -10,4 +10,7 @@ export class UpdateRivalDto {
 
   @IsNotEmpty()
   data: PriceListApiT;
+
+  @IsNotEmpty()
+  hash: string;
 }

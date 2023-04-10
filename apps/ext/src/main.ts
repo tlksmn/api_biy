@@ -7,15 +7,11 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app/app.module';
-import * as process from 'process';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 
 const corsOptions = {
-  origin:
-    process.env.NODE_ENV === 'dev'
-      ? 'http://localhost:4200'
-      : 'https://kaspi.kz',
+  origin: 'https://kaspi.kz',
   credentials: true,
   optionSuccessStatus: 200,
 };
@@ -33,7 +29,7 @@ async function bootstrap() {
   app.use(helmet());
   app.use(
     rateLimit({
-      windowMs: 1 * 60 * 1000, // 2 minutes
+      windowMs: 1 * 60 * 1000, // 1 minutes
       max: 100, // limit each IP to 100 requests per windowMs
     })
   );

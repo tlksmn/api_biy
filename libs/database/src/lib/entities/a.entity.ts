@@ -4,9 +4,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { AT } from '@biy/base-type';
 
-export abstract class AEntity extends BaseEntity implements AT {
+export abstract class AEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

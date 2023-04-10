@@ -1,6 +1,5 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ActivateDto, ExtensionRoute, UpdateRivalDto } from '@biy/dto';
-
 import { AppService } from './app.service';
 
 @Controller()

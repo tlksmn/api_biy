@@ -48,6 +48,7 @@ export class AppService {
       select: {
         id: true,
         name: true,
+        activated: true,
         sellers: {
           id: true,
           sysId: true,

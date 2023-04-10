@@ -57,7 +57,7 @@ export class AppService {
       },
     });
     if (user.length === 0)
-      throw new HttpException('invalid', HttpStatus.BAD_REQUEST);
+      throw new HttpException('invalid data sent) 042', HttpStatus.BAD_REQUEST);
 
     return user[0];
   }

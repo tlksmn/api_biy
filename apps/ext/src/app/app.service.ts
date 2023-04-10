@@ -64,7 +64,10 @@ export class AppService {
 
   async updateRival(payload: UpdateRivalDto) {
     const rival = await this.rivalConfigRepository.findOne({
-      where: { seller: { id: payload.sellerId }, id: payload.id },
+      where: {
+        seller: { id: payload.sellerId, user: { hash: payload.hash } },
+        id: payload.id,
+      },
     });
     if (!rival) {
       throw new HttpException('not found', HttpStatus.NOT_FOUND);

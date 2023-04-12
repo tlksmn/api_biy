@@ -1,4 +1,4 @@
-import { Column, Entity, Unique, OneToMany } from 'typeorm';
+import { Column, Entity, Unique, OneToMany, Index } from 'typeorm';
 
 import { PointConfigEntity } from './point.config.entity';
 import { AEntity } from './a.entity';
@@ -13,6 +13,7 @@ export class ProductEntity extends AEntity {
   @Column()
   url: string;
 
+  @Index()
   @Column({ nullable: false })
   sku: string;
 

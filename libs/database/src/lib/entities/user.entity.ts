@@ -1,10 +1,11 @@
-import { BeforeInsert, Column, Entity, OneToMany } from 'typeorm';
+import { BeforeInsert, Column, Entity, Index, OneToMany } from 'typeorm';
 import { SellerEntity } from './seller.entity';
 import { AEntity } from './a.entity';
 import * as bcrypt from 'bcrypt';
 
 @Entity('user')
 export class UserEntity extends AEntity {
+  @Index()
   @Column({ unique: true })
   email: string;
 
@@ -20,6 +21,7 @@ export class UserEntity extends AEntity {
   @Column({ nullable: true })
   name: string;
 
+  @Index()
   @Column()
   hash: string;
 

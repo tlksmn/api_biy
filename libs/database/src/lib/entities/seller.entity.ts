@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  Index,
   JoinTable,
   ManyToMany,
   ManyToOne,
@@ -25,6 +26,7 @@ export class SellerEntity extends AEntity {
   @Column({ select: false, nullable: true })
   password: string;
 
+  @Index()
   @Column()
   sysId: string;
 
@@ -44,6 +46,7 @@ export class SellerEntity extends AEntity {
   @Column({ default: false })
   rivalStatus: boolean;
 
+  @Index()
   @Column()
   email: string;
 

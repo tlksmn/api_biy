@@ -3,7 +3,7 @@ import { SellerEntity } from './seller.entity';
 import { CityEntity } from './city.entity';
 import { PointConfigEntity } from './point.config.entity';
 import { AEntity } from './a.entity';
-import { StateE } from '../../../../api-type/src/lib/state.enum';
+import { StateE } from '@biy/api-type';
 
 @Entity('point')
 export class PointEntity extends AEntity {

@@ -1,10 +1,10 @@
-import { Column, Entity, ManyToOne, Unique } from 'typeorm';
+import { Column, Entity, Index, ManyToOne, Unique } from 'typeorm';
 import { ProductEntity } from './product.entity';
 import { CityEntity } from './city.entity';
 import { PointEntity } from './point.entity';
 import { SellerEntity } from './seller.entity';
 import { AEntity } from './a.entity';
-import { StateE } from '../../../../api-type/src/lib/state.enum';
+import { StateE } from '@biy/api-type';
 import { RivalConfigEntity } from './rival.config.entity';
 
 @Unique('seller_product_city_point', ['seller', 'product', 'city', 'point'])
@@ -32,11 +32,13 @@ export class PointConfigEntity extends AEntity {
 
   //---- relations ----
 
+  @Index()
   @ManyToOne(() => SellerEntity, (seller) => seller.pointConfigs, {
     onDelete: 'CASCADE',
   })
   seller: SellerEntity;
 
+  @Index()
   @ManyToOne(() => ProductEntity, (product) => product.pointConfigs)
   product: ProductEntity;
 
@@ -46,6 +48,7 @@ export class PointConfigEntity extends AEntity {
   @ManyToOne(() => PointEntity, (point) => point.pointConfigs)
   point: PointEntity;
 
+  @Index()
   @ManyToOne(() => RivalConfigEntity, (rival) => rival.pointConfigs)
   rivalConfig: RivalConfigEntity;
 }

@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany, Unique } from 'typeorm';
+import { Column, Entity, Index, ManyToOne, OneToMany, Unique } from 'typeorm';
 import { AEntity } from './a.entity';
 import { SellerEntity } from './seller.entity';
 import { ProductEntity } from './product.entity';
@@ -23,11 +23,13 @@ export class RivalConfigEntity extends AEntity {
   @OneToMany(() => PointConfigEntity, (pointConfig) => pointConfig.rivalConfig)
   pointConfigs: PointConfigEntity[];
 
+  @Index()
   @ManyToOne(() => SellerEntity, (seller) => seller.rivalConfigs, {
     onDelete: 'CASCADE',
   })
   seller: SellerEntity;
 
+  @Index()
   @ManyToOne(() => ProductEntity, (product) => product.rivalConfigs)
   product: ProductEntity;
 

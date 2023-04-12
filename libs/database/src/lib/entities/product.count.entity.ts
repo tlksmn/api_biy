@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, OneToOne } from 'typeorm';
 import { SellerEntity } from './seller.entity';
 import { AEntity } from './a.entity';
 
@@ -18,6 +18,7 @@ export class ProductCountEntity extends AEntity {
 
   //---- relations ----
 
+  @Index()
   @OneToOne(() => SellerEntity, {
     cascade: true,
     onDelete: 'CASCADE',

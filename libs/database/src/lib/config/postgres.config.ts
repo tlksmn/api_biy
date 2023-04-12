@@ -23,7 +23,7 @@ export function postgresConfig(): TypeOrmModuleAsyncOptions {
       port: configService.get('POSTGRES_PORT'),
       database: configService.get('POSTGRES_DATABASE'),
       synchronize: true,
-      dropSchema: true,
+      // dropSchema: true,
       // logging: true,
       entities: [
         PointConfigEntity,

@@ -2,37 +2,49 @@ import { Injectable } from '@nestjs/common';
 import { PriceListApiT } from '@biy/api-type';
 import { ProxyService } from '../proxy/proxy.service';
 import axios from 'axios';
+import { ProductEntity } from '@biy/database';
 
 @Injectable()
 export class KaspiApi {
   constructor(private readonly proxyService: ProxyService) {}
 
-  async get(productId: number, cityId: number, productName: string) {
-    const data = JSON.stringify({
+  async get(product: ProductEntity, cityId: number) {
+    const data = {
       cityId: cityId,
-      id: productId,
+      id: product.sku,
       merchantUID: '',
+      installationId: -1,
       limit: 10,
       page: 0,
       sort: true,
-    });
-    const translated = this.transliterate(productName).toLowerCase();
+      product: {
+        baseProductCodes: [],
+        brand: product.brand,
+        categoryCodes: [],
+        groups: [],
+      },
+      zoneId: 'Magnum_ZONE1',
+    };
     const config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: `https://kaspi.kz/yml/offer-view/offers/${productId}`,
+      url: `https://kaspi.kz/yml/offer-view/offers/${product.sku}/`,
       headers: {
-        Accept: '*/*',
+        Accept: 'application/json, text/*',
         'Accept-Language': 'en-US,en;q=0.9',
         'Content-Type': 'application/json; charset=UTF-8',
+        Connection: 'keep-alive',
         Origin: 'https://kaspi.kz',
-        Referer: `https://kaspi.kz/shop/p/${translated}-${productId}/?c=${cityId}`,
+        Referer: product.url + '?c=' + cityId,
+        Cookie:
+          'k_stat=c1594452-2b56-49b0-b8af-e893477e599e; ks.tg=97; ssaid=1300c5a0-ba6e-11ed-adb3-e73e2d14dead; kaspi.storefront.cookie.city=750000000; ks.cc=-1; amp_6e9c16=V-sbMIIDGZFz6d_NzsO539...1gtr92sq9.1gtra9svk.bn.0.bn; ks.ngs.s=e633617833b29aed2e06a1bb5b0d3d82; __tld__=null',
         'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Dest': 'empty',
         'Sec-Fetch-Site': 'same-origin',
         'User-Agent':
-          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36',
+          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36',
         'sec-ch-ua':
-          '"Google Chrome";v="111", "Not(A:Brand";v="8", "Chromium";v="111"',
+          '"Chromium";v="112", "Google Chrome";v="112", "Not:A-Brand";v="99"',
         'sec-ch-ua-mobile': '?0',
         'sec-ch-ua-platform': '"macOS"',
       },
@@ -41,83 +53,5 @@ export class KaspiApi {
     };
     const request = await axios.request<PriceListApiT>(config);
     return request.data;
-  }
-
-  private transliterate(word): string {
-    const a = {
-      Ё: 'YO',
-      Й: 'I',
-      Ц: 'TS',
-      У: 'U',
-      К: 'K',
-      Е: 'E',
-      Н: 'N',
-      Г: 'G',
-      Ш: 'SH',
-      Щ: 'SCH',
-      З: 'Z',
-      Х: 'H',
-      Ъ: "'",
-      ё: 'yo',
-      й: 'i',
-      ц: 'ts',
-      у: 'u',
-      к: 'k',
-      е: 'e',
-      н: 'n',
-      г: 'g',
-      ш: 'sh',
-      щ: 'sch',
-      з: 'z',
-      х: 'h',
-      ъ: "'",
-      Ф: 'F',
-      Ы: 'I',
-      В: 'V',
-      А: 'A',
-      П: 'P',
-      Р: 'R',
-      О: 'O',
-      Л: 'L',
-      Д: 'D',
-      Ж: 'ZH',
-      Э: 'E',
-      ф: 'f',
-      ы: 'i',
-      в: 'v',
-      а: 'a',
-      п: 'p',
-      р: 'r',
-      о: 'o',
-      л: 'l',
-      д: 'd',
-      ж: 'zh',
-      э: 'e',
-      Я: 'Ya',
-      Ч: 'CH',
-      С: 'S',
-      М: 'M',
-      И: 'I',
-      Т: 'T',
-      Ь: "'",
-      Б: 'B',
-      Ю: 'YU',
-      я: 'ya',
-      ч: 'ch',
-      с: 's',
-      м: 'm',
-      и: 'i',
-      т: 't',
-      ь: "'",
-      б: 'b',
-      ю: 'yu',
-      ' ': '_',
-    };
-    return word
-      .split('')
-      .map(function (char) {
-        return a[char] || char;
-      })
-      .join('');
   }
 }

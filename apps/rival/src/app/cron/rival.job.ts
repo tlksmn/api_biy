@@ -35,9 +35,8 @@ export class RivalJob implements CronI {
         for (const rivalConfig of product.rivalConfigs) {
           try {
             const response = await this.kaspiApi.get(
-              +product.sku,
-              rivalConfig.city.id,
-              product.name
+              product,
+              rivalConfig.city.code
             );
             temp++;
             rivalConfig.rivalSeller = response;
@@ -46,7 +45,7 @@ export class RivalJob implements CronI {
             // change price depends to min price
             //--todo
           } catch (e) {
-            console.log(e);
+            console.log(e.message);
           }
         }
       }

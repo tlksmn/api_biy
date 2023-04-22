@@ -8,6 +8,7 @@ import { PriceListApiT } from '@biy/api-type';
 export type RivalConfigT = AT & {
   price: number;
   minPrice: number;
+  oldPrice: number;
   rivalSeller: PriceListApiT;
   pointConfigs: PointConfigT[];
   seller: SellerT;

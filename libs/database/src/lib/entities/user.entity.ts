@@ -22,7 +22,7 @@ export class UserEntity extends AEntity {
   name: string;
 
   @Index()
-  @Column()
+  @Column({ unique: true })
   hash: string;
 
   //---- relations ----

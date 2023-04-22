@@ -64,7 +64,7 @@ export class SellerEntity extends AEntity {
   @OneToOne(() => ProductCountEntity, (count) => count.seller)
   count: ProductCountEntity;
 
-  @ManyToOne(() => UserEntity, (user) => user.sellers)
+  @ManyToOne(() => UserEntity, (user) => user.sellers, { onDelete: 'CASCADE' })
   user: UserEntity;
 
   @OneToMany(() => PointEntity, (point) => point.seller)

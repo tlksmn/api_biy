@@ -15,6 +15,9 @@ export class RivalConfigEntity extends AEntity {
   @Column({ default: 0 })
   minPrice: number;
 
+  @Column({ default: 0 })
+  oldPrice: number;
+
   @Column({ type: 'json', nullable: true })
   rivalSeller: PriceListApiT;
 

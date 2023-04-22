@@ -63,16 +63,35 @@ export class AppService {
   }
 
   async updateRival(payload: UpdateRivalDto) {
+    if (
+      payload.data.total < 1 ||
+      payload.data.offers.length === 0 ||
+      payload.data.offersCount < 1
+    ) {
+      throw new HttpException('x_X', HttpStatus.BAD_REQUEST);
+    }
     const rival = await this.rivalConfigRepository.findOne({
       where: {
         seller: { id: payload.sellerId, user: { hash: payload.hash } },
         id: payload.id,
       },
+      relations: { seller: true },
     });
-    if (!rival) {
+    if (!rival || !rival.seller) {
       throw new HttpException('not found', HttpStatus.NOT_FOUND);
     }
+    const firstSeller = payload.data.offers[0];
+    if (firstSeller?.merchantId !== rival.seller.sysId) {
+      return this.rivalConfigRepository.save(rival);
+    }
+
+    const temp = rival.price;
     rival.rivalSeller = payload.data;
+    rival.oldPrice =
+      payload.data.offers.filter((e) => e.merchantId === rival.seller.sysId)[0]
+        ?.price || temp;
+    const newPrice = payload.data.offers[0].price - 2;
+    rival.price = newPrice < rival.minPrice ? newPrice : rival.minPrice + 100;
     return this.rivalConfigRepository.save(rival);
   }
 }

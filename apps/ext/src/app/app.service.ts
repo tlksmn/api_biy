@@ -81,17 +81,20 @@ export class AppService {
       throw new HttpException('not found', HttpStatus.NOT_FOUND);
     }
     const firstSeller = payload.data.offers[0];
+    const currentSeller = payload.data.offers.filter(
+      (e) => e.merchantId === rival.seller.sysId
+    )[0];
+    rival.rivalSeller = payload.data;
+    const temp = rival.price;
+    rival.oldPrice = currentSeller?.price || temp;
     if (firstSeller?.merchantId !== rival.seller.sysId) {
       return this.rivalConfigRepository.save(rival);
     }
 
-    const temp = rival.price;
-    rival.rivalSeller = payload.data;
-    rival.oldPrice =
-      payload.data.offers.filter((e) => e.merchantId === rival.seller.sysId)[0]
-        ?.price || temp;
-    const newPrice = payload.data.offers[0].price - 2;
-    rival.price = newPrice < rival.minPrice ? newPrice : rival.minPrice + 100;
+    const newPrice = firstSeller.price - 2;
+    if (rival.minPrice === 0) {
+      rival.price = newPrice < rival.minPrice ? newPrice : rival.minPrice + 100;
+    }
     return this.rivalConfigRepository.save(rival);
   }
 }

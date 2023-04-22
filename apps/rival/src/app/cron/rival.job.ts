@@ -40,6 +40,12 @@ export class RivalJob implements CronI {
             );
             temp++;
             rivalConfig.rivalSeller = response;
+            const tempInFirstPrice = response.offers[0].price - 10;
+            const minPrice = rivalConfig.minPrice;
+            rivalConfig.price =
+              tempInFirstPrice > rivalConfig.minPrice
+                ? tempInFirstPrice - 5
+                : minPrice + 100;
             rivalAcc.push(rivalConfig);
             //--todo
             // change price depends to min price

@@ -11,6 +11,8 @@ export enum SellerRoute {
   update = 'update',
   getList = 'list',
   byId = ':sellerId',
+  reintegrate = 'reintegrate',
+  delete = 'delete',
 }
 
 export enum ProductRoute {
@@ -32,6 +34,7 @@ export enum RivalConfigRoute {
 export enum EventRoute {
   addSeller = 'add-seller',
   updateSeller = 'update-seller',
+  reintegrateSeller = 'reintegrate-seller',
 }
 
 export enum FileRoute {

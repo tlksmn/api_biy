@@ -15,10 +15,17 @@ import {
 import { AddSellerEvent } from './add.seller.event';
 import { UpdateSellerEvent } from './update.seller.event';
 import { MainSellerEvent } from './main.seller.event';
+import { ReintegrateSellerEvent } from './reintegrate.seller.event';
+
 import { KaspiModule } from '../../mp/kaspi/kaspi.module';
 
 @Module({
-  providers: [MainSellerEvent, AddSellerEvent, UpdateSellerEvent],
+  providers: [
+    MainSellerEvent,
+    AddSellerEvent,
+    UpdateSellerEvent,
+    ReintegrateSellerEvent,
+  ],
   imports: [
     TypeOrmModule.forFeature([
       CityEntity,

@@ -1,9 +1,19 @@
 import { Repository } from 'typeorm';
 import { SellerEntity, UserEntity } from '@biy/database';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AddSellerDto, EventRoute, UpdateSellerDto } from '@biy/dto';
+import {
+  AddSellerDto,
+  AddSellerEventPayload,
+  EventRoute,
+  ReintegrateDto,
+  ReintegrateSellerEventPayload,
+  UpdateSellerDto,
+} from '@biy/dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Rabbit } from 'crypto-js';
+import CryptoJS = require('crypto-js/core');
+import { ConfigService } from '@nestjs/config';
 
 import { KaspiService } from '../../mp/kaspi/kaspi.service';
 
@@ -13,7 +23,8 @@ export class SellerService {
     @InjectRepository(SellerEntity)
     private readonly sellerRepository: Repository<SellerEntity>,
     private readonly kaspiService: KaspiService,
-    private readonly eventEmitter: EventEmitter2
+    private readonly eventEmitter: EventEmitter2,
+    private readonly configService: ConfigService
   ) {}
 
   async addSeller(data: AddSellerDto, user: UserEntity) {
@@ -27,11 +38,12 @@ export class SellerService {
       );
 
     const token: string = await this.kaspiService.login(data);
-    this.eventEmitter.emit(EventRoute.addSeller, {
+    const payload: AddSellerEventPayload = {
       token,
       userId: user.id,
       data,
-    });
+    };
+    this.eventEmitter.emit(EventRoute.addSeller, payload);
     return true;
   }
 
@@ -51,6 +63,7 @@ export class SellerService {
       order: { id: 'asc', cities: { id: 'asc' }, points: { id: 'asc' } },
     });
   }
+
   async update(data: UpdateSellerDto, user: UserEntity) {
     const seller = await this.sellerRepository.findOne({
       where: { id: data.id, user: { id: user.id } },
@@ -60,5 +73,63 @@ export class SellerService {
     }
     Object.assign(seller, data);
     return this.sellerRepository.save(seller);
+  }
+
+  async reintegrate(user: UserEntity, data: ReintegrateDto) {
+    const seller = await this.sellerRepository.findOne({
+      where: {
+        id: data.sellerId,
+      },
+      select: {
+        id: true,
+        email: true,
+        password: true,
+      },
+    });
+    if (!seller) {
+      throw new HttpException('seller not found', HttpStatus.NOT_FOUND);
+    }
+    const password = Rabbit.decrypt(
+      seller.password,
+      this.configService.get('RABBIT_PASSWORD')
+    ).toString(CryptoJS.enc.Utf8);
+
+    const token: string = await this.kaspiService.login({
+      email: seller.email,
+      password,
+    });
+
+    const payload: ReintegrateSellerEventPayload = {
+      token: token,
+      userId: user.id,
+      userEmail: user.email,
+      sellerId: seller.id,
+      data: {
+        password: password,
+        email: seller.email,
+      },
+    };
+
+    this.eventEmitter.emit(EventRoute.reintegrateSeller, payload);
+
+    return {
+      message: 'reintegration has been started',
+    };
+  }
+
+  async delete(user: UserEntity, sellerId: number) {
+    const seller = await this.sellerRepository.findOne({
+      where: {
+        id: sellerId,
+        user: { id: user.id },
+      },
+    });
+    if (!seller) {
+      throw new HttpException('seller not found', HttpStatus.NOT_FOUND);
+    }
+    await this.sellerRepository.remove(seller);
+    return {
+      message: 'ok',
+    };
   }
 }

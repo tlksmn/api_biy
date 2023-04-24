@@ -1,5 +1,10 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
-import { AddSellerDto, SellerRoute, UpdateSellerDto } from '@biy/dto';
+import {
+  AddSellerDto,
+  ReintegrateDto,
+  SellerRoute,
+  UpdateSellerDto,
+} from '@biy/dto';
 import { UserEntity } from '@biy/database';
 
 import { SellerService } from './seller.service';
@@ -29,5 +34,15 @@ export class SellerController {
   @Post(SellerRoute.update)
   updateSeller(@User() user: UserEntity, @Body() data: UpdateSellerDto) {
     return this.sellerService.update(data, user);
+  }
+
+  @Post(SellerRoute.reintegrate)
+  reintegrateSeller(@User() user: UserEntity, @Body() data: ReintegrateDto) {
+    return this.sellerService.reintegrate(user, data);
+  }
+
+  @Post(SellerRoute.delete)
+  deleteSeller(@User() user: UserEntity, @Body() data: ReintegrateDto) {
+    return this.sellerService.delete(user, data.sellerId);
   }
 }

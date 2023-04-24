@@ -10,7 +10,7 @@ import { RivalConfigEntity } from './rival.config.entity';
 @Unique('seller_product_city_point', ['seller', 'product', 'city', 'point'])
 @Entity('point_config')
 export class PointConfigEntity extends AEntity {
-  @Column()
+  @Column({ default: false })
   available: boolean;
   // it's managed for preorders in xml *
   // if not available and status active *p

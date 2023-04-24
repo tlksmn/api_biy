@@ -1,8 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { EventHandleI } from '../event.handle.interface';
+import { AddSellerDto, ReintegrateSellerEventPayload } from '@biy/dto';
+import { KaspiService } from '../../mp/kaspi/kaspi.service';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ProductCountApiT, ResponseAPI, SellerApiT } from '@biy/api-type';
-import { AddSellerDto, AddSellerEventPayload } from '@biy/dto';
 import {
   CityEntity,
   PointConfigEntity,
@@ -14,14 +14,13 @@ import {
   StateE,
   UserEntity,
 } from '@biy/database';
-
-import { KaspiService } from '../../mp/kaspi/kaspi.service';
-import { EventHandleI } from '../event.handle.interface';
+import { Repository } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
+import { ProductCountApiT, ResponseAPI, SellerApiT } from '@biy/api-type';
 import { Rabbit } from 'crypto-js';
 
 @Injectable()
-export class AddSellerEvent implements EventHandleI {
+export class ReintegrateSellerEvent implements EventHandleI {
   constructor(
     private readonly kaspiService: KaspiService,
     @InjectRepository(CityEntity)
@@ -43,34 +42,33 @@ export class AddSellerEvent implements EventHandleI {
     private readonly configService: ConfigService
   ) {}
 
-  async handle(payload: AddSellerEventPayload) {
+  async handle(data: ReintegrateSellerEventPayload) {
     const user = await this.userRepository.findOne({
-      where: { id: payload.userId },
+      where: { id: data.userId },
     });
 
     if (!user) throw new HttpException('user not found', HttpStatus.NOT_FOUND);
 
     const [seller, productCount] = await Promise.all([
-      this.kaspiService.getSellerInfo({ token: payload.token }),
-      this.kaspiService.getProductCount({ token: payload.token }),
+      this.kaspiService.getSellerInfo({ token: data.token }),
+      this.kaspiService.getProductCount({ token: data.token }),
     ]);
-
-    const data = await this.saveSellerAndCount(
+    const temp = await this.updateSellerAndCount(
       seller,
       productCount,
       user,
-      payload.data
+      data.data
     );
 
     const responseOffers = await this.kaspiService.getProductList(
-      { token: payload.token },
+      { token: data.token },
       { limit: 1000 }
     );
 
-    await this.saveList(responseOffers, data);
+    await this.saveList(responseOffers, temp);
   }
 
-  private async saveSellerAndCount(
+  async updateSellerAndCount(
     sellerResponse: SellerApiT,
     countResponse: ProductCountApiT,
     user: UserEntity,
@@ -79,9 +77,8 @@ export class AddSellerEvent implements EventHandleI {
     let seller = await this.sellerRepository.findOne({
       where: { sysId: sellerResponse.affiliateId },
     });
-    if (seller)
-      throw new HttpException('seller already defined', HttpStatus.BAD_REQUEST);
-
+    if (!seller)
+      throw new HttpException('seller not found', HttpStatus.NOT_FOUND);
     const encryptedPassword = Rabbit.encrypt(
       data.password,
       this.configService.get('RABBIT_PASSWORD')
@@ -96,31 +93,43 @@ export class AddSellerEvent implements EventHandleI {
       sysId: sellerResponse.affiliateId,
       username: sellerResponse.name,
       user: { id: user.id },
+      id: seller.id,
     });
     seller = await this.sellerRepository.save(sellerTemp);
-
+    const countSeller = await this.productCountRepository.findOne({
+      where: { seller: { id: seller.id } },
+    });
     const countTemp: ProductCountEntity = this.productCountRepository.create({
       expiringCount: countResponse.expiringCount,
       processingCount: countResponse.processingCount,
       activeCount: countResponse.activeCount,
       archiveCount: countResponse.archiveCount,
-      seller: seller,
+      id: countSeller.id,
     });
     await this.productCountRepository.save(countTemp);
 
     const pointsAcc: PointEntity[] = [];
+
     for (const point of sellerResponse.pointOfServiceList) {
       const city = await this.cityRepository.findOneBy({
         name: point.cityName,
       });
-      const newPoint = this.pointRepository.create({
-        seller: seller,
+      let pointAcc = await this.pointRepository.findOne({
+        where: {
+          name: point.displayName,
+          seller: {
+            id: seller.id,
+          },
+        },
+      });
+      pointAcc = this.pointRepository.create({
         name: point.displayName,
         status: point.status,
         streetName: point.address.formattedAddress,
         city: city,
+        id: pointAcc.id,
       });
-      pointsAcc.push(newPoint);
+      pointsAcc.push(pointAcc);
     }
     const points = await this.pointRepository.save(pointsAcc);
 
@@ -134,7 +143,7 @@ export class AddSellerEvent implements EventHandleI {
     return { seller, cities, points };
   }
 
-  private async saveList(
+  async saveList(
     response: ResponseAPI,
     data: {
       seller: SellerEntity;
@@ -148,56 +157,88 @@ export class AddSellerEvent implements EventHandleI {
         sku: offer.masterProduct.sku,
       });
       if (!product) {
-        const productTemp = await this.productRepository.create({
+        product = await this.productRepository.create({
           sku: offer.masterProduct.sku,
           name: offer.masterProduct.name,
           brand: offer.masterProduct.brand,
           url: offer.masterProduct.productUrl,
           image: offer.masterProduct.primaryImage.small,
         });
-        product = await this.productRepository.save(productTemp);
       }
+      product = await this.productRepository.save(product);
       for (const city of offer.cityInfo) {
         if (!city.pickupPoints || city.pickupPoints?.length < 0) {
           continue;
         }
-        //--rival config definition--
         const currentCity = data.cities.filter((e) => e.name === city.name)[0];
         if (!currentCity) {
           continue;
         }
-        const rivalConfigTemp = this.rivalConfigRepository.create({
-          seller: data.seller,
-          city: currentCity,
-          product: product,
-          rivalSeller: {},
-          price:
-            city?.priceRow?.price || offer?.priceMin || offer?.priceMax || 0,
+        let rivalConfigTemp = await this.rivalConfigRepository.findOne({
+          where: {
+            seller: {
+              id: data.seller.id,
+            },
+            city: {
+              id: currentCity.id,
+            },
+            product: {
+              id: product.id,
+            },
+          },
         });
+        if (!rivalConfigTemp) {
+          rivalConfigTemp = this.rivalConfigRepository.create({
+            seller: data.seller,
+            city: currentCity,
+            product: product,
+            rivalSeller: {},
+          });
+        }
+        rivalConfigTemp.price =
+          city?.priceRow?.price || offer?.priceMin || offer?.priceMax || 0;
         const rival = await this.rivalConfigRepository.save(rivalConfigTemp);
-        //--rival config definition--
-
         for (const point of city.pickupPoints) {
-          //--point config definition
           const currentPoint = data.points.filter(
             (e) => e.name === point.displayName
           )[0];
           if (!currentPoint) {
             continue;
           }
-          const pointConfigTemp = this.pointConfigRepository.create({
-            seller: data.seller,
-            product: product,
-            point: currentPoint,
-            city: currentCity,
-            available: offer?.offerStatus === StateE.ACTIVE && point.available,
-            rivalConfig: rival,
-            status:
-              offer.offerStatus === StateE.ACTIVE
-                ? offer.offerStatus
-                : point.status,
+          let pointConfigTemp = await this.pointConfigRepository.findOne({
+            where: {
+              seller: {
+                id: data.seller.id,
+              },
+              product: {
+                id: product.id,
+              },
+              point: {
+                id: currentPoint.id,
+              },
+              city: {
+                id: currentCity.id,
+              },
+              rivalConfig: {
+                id: rivalConfigTemp.id,
+              },
+            },
           });
-          //--point config definition
+          if (!pointConfigTemp) {
+            pointConfigTemp = this.pointConfigRepository.create({
+              seller: data.seller,
+              product: product,
+              point: currentPoint,
+              city: currentCity,
+              rivalConfig: rival,
+            });
+          }
+          point.available =
+            offer.offerStatus === StateE.ACTIVE && point.available;
+          point.status =
+            offer.offerStatus === StateE.ACTIVE
+              ? offer.offerStatus
+              : point.status;
           pointConfigArr.push(pointConfigTemp);
         }
       }
@@ -211,5 +252,6 @@ export class AddSellerEvent implements EventHandleI {
       );
       await this.pointConfigRepository.save(partPointConfigArr);
     }
+    console.log('completed' + pointConfigArrLength);
   }
 }

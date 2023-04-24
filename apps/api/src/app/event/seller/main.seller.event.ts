@@ -6,17 +6,20 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import {
   AddSellerEventPayload,
   EventRoute,
+  ReintegrateSellerEventPayload,
   UpdateSellerEventPayload,
 } from '@biy/dto';
 
 import { AddSellerEvent } from './add.seller.event';
 import { UpdateSellerEvent } from './update.seller.event';
+import { ReintegrateSellerEvent } from './reintegrate.seller.event';
 
 @Injectable()
 export class MainSellerEvent implements OnModuleInit {
   constructor(
     private readonly addSellerEvent: AddSellerEvent,
     private readonly updateSellerEvent: UpdateSellerEvent,
+    private readonly reintegrateSellerEvent: ReintegrateSellerEvent,
     @InjectRepository(CityEntity)
     private readonly cityRepository: Repository<CityEntity>
   ) {}
@@ -62,5 +65,10 @@ export class MainSellerEvent implements OnModuleInit {
   @OnEvent(EventRoute.updateSeller)
   updateSeller(payload: UpdateSellerEventPayload) {
     return this.updateSellerEvent.handle(payload);
+  }
+
+  @OnEvent(EventRoute.reintegrateSeller)
+  reintegrateSeller(payload: ReintegrateSellerEventPayload) {
+    return this.reintegrateSellerEvent.handle(payload);
   }
 }

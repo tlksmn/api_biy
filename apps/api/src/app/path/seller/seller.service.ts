@@ -12,7 +12,7 @@ import {
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Rabbit } from 'crypto-js';
-import CryptoJS = require('crypto-js/core');
+import * as crypto from 'crypto-js';
 import { ConfigService } from '@nestjs/config';
 
 import { KaspiService } from '../../mp/kaspi/kaspi.service';
@@ -92,7 +92,7 @@ export class SellerService {
     const password = Rabbit.decrypt(
       seller.password,
       this.configService.get('RABBIT_PASSWORD')
-    ).toString(CryptoJS.enc.Utf8);
+    ).toString(crypto.enc.Utf8);
 
     const token: string = await this.kaspiService.login({
       email: seller.email,

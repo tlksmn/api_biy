@@ -80,21 +80,43 @@ export class AppService {
     if (!rival || !rival.seller) {
       throw new HttpException('not found', HttpStatus.NOT_FOUND);
     }
+
+    //---todo---
+    //Price manipulation
+    const thisSeller = rival.seller;
     const firstSeller = payload.data.offers[0];
+    const secondSeller = payload.data.offers[1];
+    const thirdSeller = payload.data.offers[1];
     const currentSeller = payload.data.offers.filter(
       (e) => e.merchantId === rival.seller.sysId
     )[0];
     rival.rivalSeller = payload.data;
-    const temp = rival.price;
-    rival.oldPrice = currentSeller?.price || temp;
-    if (firstSeller?.merchantId !== rival.seller.sysId) {
-      return this.rivalConfigRepository.save(rival);
+
+    if (firstSeller || secondSeller || thirdSeller) {
+      rival.oldPrice = currentSeller?.price || rival.price;
+      if (firstSeller?.merchantId !== thisSeller.sysId) {
+        rival.price = firstSeller.price - 2;
+        return this.rivalConfigRepository.save(rival);
+      } else if (firstSeller?.merchantId === thisSeller.sysId) {
+        rival.price = secondSeller.price - 2;
+        return this.rivalConfigRepository.save(rival);
+      } else if (secondSeller?.merchantId === thisSeller.sysId) {
+        rival.price = firstSeller.price - 2;
+        return this.rivalConfigRepository.save(rival);
+      } else if (thirdSeller?.merchantId === thisSeller.sysId) {
+        rival.price = secondSeller?.price - 2;
+        return this.rivalConfigRepository.save(rival);
+      }
     }
 
     const newPrice = firstSeller.price - 2;
-    if (rival.minPrice === 0) {
+    if (rival.minPrice > 0) {
       rival.price = newPrice < rival.minPrice ? newPrice : rival.minPrice + 100;
+    } else {
+      rival.price = secondSeller.price - 2;
     }
     return this.rivalConfigRepository.save(rival);
+
+    //---todo---
   }
 }

@@ -1,10 +1,16 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Render } from '@nestjs/common';
 import { ActivateDto, ExtensionRoute, UpdateRivalDto } from '@biy/dto';
 import { AppService } from './app.service';
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
+
+  @Get('policy')
+  @Render('ext')
+  getPolicy() {
+    return {};
+  }
 
   @Get(`${ExtensionRoute.list}/:sellerId`)
   getRivalConfig(@Param('sellerId') sellerSysId: string) {

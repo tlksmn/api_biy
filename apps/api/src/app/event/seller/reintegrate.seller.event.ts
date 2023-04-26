@@ -85,7 +85,7 @@ export class ReintegrateSellerEvent implements EventHandleI {
     ).toString();
 
     const sellerTemp = this.sellerRepository.create({
-      email: sellerResponse.orderProcessingManager.email,
+      email: data.email,
       fullName: `${sellerResponse.orderProcessingManager.name} | ${sellerResponse.orderProcessingManager.firstName} ${sellerResponse.orderProcessingManager.lastName}`,
       logoUrl: sellerResponse.logoUrl,
       phone: sellerResponse.orderProcessingManager.phone,

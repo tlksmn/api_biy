@@ -17,7 +17,7 @@ async function bootstrap() {
   app.use(
     rateLimit({
       windowMs: 2 * 60 * 1000, // 30 minutes
-      max: 2, // limit each IP to 5 requests per windowMs
+      max: 5, // limit each IP to 5 requests per windowMs
     })
   );
   app.useGlobalPipes(

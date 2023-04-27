@@ -83,40 +83,36 @@ export class AppService {
 
     //---todo---
     //Price manipulation
-    const thisSeller = rival.seller;
-    const firstSeller = payload.data.offers[0];
-    const secondSeller = payload.data.offers[1];
-    const thirdSeller = payload.data.offers[1];
-    const currentSeller = payload.data.offers.filter(
+    const minPrice = rival.minPrice || 0;
+    const priceAcc = payload.data.offers;
+    const priceAccThisSeller = priceAcc.filter(
       (e) => e.merchantId === rival.seller.sysId
     )[0];
-    rival.rivalSeller = payload.data;
+    const oldPrice = priceAccThisSeller?.price || rival.price;
 
-    if (firstSeller || secondSeller || thirdSeller) {
-      rival.oldPrice = currentSeller?.price || rival.price;
-      if (firstSeller?.merchantId !== thisSeller.sysId) {
-        rival.price = firstSeller.price - 2;
-        return this.rivalConfigRepository.save(rival);
-      } else if (firstSeller?.merchantId === thisSeller.sysId) {
-        rival.price = secondSeller.price - 2;
-        return this.rivalConfigRepository.save(rival);
-      } else if (secondSeller?.merchantId === thisSeller.sysId) {
-        rival.price = firstSeller.price - 2;
-        return this.rivalConfigRepository.save(rival);
-      } else if (thirdSeller?.merchantId === thisSeller.sysId) {
-        rival.price = secondSeller?.price - 2;
-        return this.rivalConfigRepository.save(rival);
+    if (minPrice === 0) {
+      rival.price = priceAcc[0].price - 2;
+    } else {
+      if (priceAccThisSeller) {
+        rival.price = priceAcc[1].price - 2;
+      } else if (minPrice < priceAcc[0].price) {
+        rival.price = priceAcc[0].price - 2;
+      } else if (minPrice < priceAcc[1].price) {
+        rival.price = priceAcc[1].price - 2;
+      } else if (minPrice < priceAcc[2].price) {
+        rival.price = priceAcc[2].price - 2;
+      } else if (minPrice < priceAcc[3].price) {
+        rival.price = priceAcc[3].price - 2;
+      } else if (minPrice < priceAcc[4].price) {
+        rival.price = priceAcc[4].price - 2;
+      } else {
+        rival.price = rival.minPrice + 2;
       }
     }
-
-    const newPrice = firstSeller.price - 2;
-    if (rival.minPrice > 0) {
-      rival.price = newPrice < rival.minPrice ? newPrice : rival.minPrice + 100;
-    } else {
-      rival.price = secondSeller.price - 2;
-    }
-    return this.rivalConfigRepository.save(rival);
-
+    rival.oldPrice = oldPrice;
+    await this.rivalConfigRepository.save(rival);
+    return { message: 'ok' };
+    //Price manipulation
     //---todo---
   }
 }

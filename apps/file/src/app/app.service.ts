@@ -25,9 +25,14 @@ export class AppService {
     }
 
     const products = await this.productRepository.find({
-      where: { rivalConfigs: { seller: { id: seller.id } } },
+      where: {
+        rivalConfigs: {
+          seller: { id: seller.id },
+          pointConfigs: { available: true },
+        },
+      },
       relations: {
-        rivalConfigs: { city: true },
+        rivalConfigs: { city: true, pointConfigs: true },
         pointConfigs: { point: true },
       },
     });

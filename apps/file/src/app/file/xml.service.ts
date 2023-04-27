@@ -45,24 +45,30 @@ export class XmlService implements FileI {
     products: ProductEntity[]
   ) {
     return products.map((product) => {
-      const availability = product.pointConfigs.map((config) => {
-        const preorderObj =
-          seller.user.activated && seller.preOrderStatus && config.preOrder > 0
-            ? { $preOrder: config.preOrder }
-            : {};
+      const availability = product.pointConfigs
+        .filter((e) => e.available)
+        .map((config) => {
+          const preorderObj =
+            seller.user.activated &&
+            seller.preOrderStatus &&
+            config.preOrder > 0
+              ? { $preOrder: config.preOrder }
+              : {};
 
-        return {
-          $available: config.available ? 'yes' : 'no',
-          $storeId: config.point.name,
-          ...preorderObj,
-        };
-      });
-      const cityPrices = product.rivalConfigs.map((config) => {
-        return {
-          $cityId: config.city.code,
-          '#text': config.price,
-        };
-      });
+          return {
+            $available: config.available ? 'yes' : 'no',
+            $storeId: config.point.name,
+            ...preorderObj,
+          };
+        });
+      const cityPrices = product.rivalConfigs
+        .filter((e) => e.pointConfigs?.some((e) => e.available))
+        .map((config) => {
+          return {
+            $cityId: config.city.code,
+            '#text': config.price,
+          };
+        });
 
       return {
         $sku: product.sku,

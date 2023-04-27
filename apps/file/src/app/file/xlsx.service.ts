@@ -27,7 +27,7 @@ export class XlsxService implements FileI {
     for (let i = 0; i < 10; i++) {
       ws.cell(1, i + 1).string(this.rowsName[i]);
     }
-    for (let i = 2; i < productList.length; i++) {
+    for (let i = 2; i < productList.length + 2; i++) {
       const product = productList[i - 2];
       ws.cell(i, 1).string(product.sku); //sku
       ws.cell(i, 2).string(product.name); //model

@@ -13,11 +13,14 @@ export class RivalConfigService {
 
   async update(data: UpdateRivalConfigDto, user: UserEntity) {
     const rivalConfig = await this.rivalConfigRepository.findOne({
-      where: { seller: { user: { id: user.id } } },
+      where: { seller: { user: { id: user.id } }, id: data.id },
     });
     if (!rivalConfig) {
       throw new HttpException('not acceptable', HttpStatus.NOT_ACCEPTABLE);
     }
+    const oldPrice = rivalConfig.price;
+    if (data.price === oldPrice) rivalConfig.oldPrice = oldPrice;
+
     Object.assign(rivalConfig, data);
     return this.rivalConfigRepository.save(rivalConfig);
   }

@@ -3,7 +3,5 @@ import { EventHandleI } from '../event.handle.interface';
 
 @Injectable()
 export class UpdateSellerEvent implements EventHandleI {
-  handle(payload) {
-    console.log(payload);
-  }
+  async handle(payload) {}
 }

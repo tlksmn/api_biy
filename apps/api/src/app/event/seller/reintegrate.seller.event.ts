@@ -62,7 +62,7 @@ export class ReintegrateSellerEvent implements EventHandleI {
 
     const responseOffers = await this.kaspiService.getProductList(
       { token: data.token },
-      { limit: 1000 }
+      { limit: 4000 }
     );
 
     await this.saveList(responseOffers, temp);
@@ -252,6 +252,5 @@ export class ReintegrateSellerEvent implements EventHandleI {
       );
       await this.pointConfigRepository.save(partPointConfigArr);
     }
-    console.log('completed' + pointConfigArrLength);
   }
 }

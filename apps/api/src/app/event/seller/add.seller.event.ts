@@ -64,7 +64,7 @@ export class AddSellerEvent implements EventHandleI {
 
     const responseOffers = await this.kaspiService.getProductList(
       { token: payload.token },
-      { limit: 1000 }
+      { limit: 4000 }
     );
 
     await this.saveList(responseOffers, data);

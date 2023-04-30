@@ -56,7 +56,6 @@ export class AppService {
         },
       },
     });
-    console.log(user);
     if (user.length === 0)
       throw new HttpException('invalid data sent) 042', HttpStatus.BAD_REQUEST);
 

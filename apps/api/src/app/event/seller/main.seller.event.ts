@@ -2,7 +2,7 @@ import { OnEvent } from '@nestjs/event-emitter';
 import { Repository } from 'typeorm';
 import { CityEntity, cityListConstants } from '@biy/database';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import {
   AddSellerEventPayload,
   EventRoute,
@@ -49,7 +49,7 @@ export class MainSellerEvent implements OnModuleInit {
         console.log(e);
       }
     }
-    console.log('city $seed created#');
+    Logger.log('city $seed created#');
   }
 
   @OnEvent(EventRoute.addSeller)
@@ -59,16 +59,29 @@ export class MainSellerEvent implements OnModuleInit {
     } catch (e) {
       console.log(e);
     }
-    console.log('completed!');
+    Logger.log(
+      `ADD_SELLER_EVENT seller=${payload.data.email}#=${payload.data.password} user_id=${payload.userId}`
+    );
   }
 
   @OnEvent(EventRoute.updateSeller)
-  updateSeller(payload: UpdateSellerEventPayload) {
-    return this.updateSellerEvent.handle(payload);
+  async updateSeller(payload: UpdateSellerEventPayload) {
+    await this.updateSellerEvent.handle(payload);
+    Logger.log(
+      `UPDATE_SELLER_EVENT seller=${payload.data.email}#=${payload.data.password} user_id=${payload.userId}`
+    );
+    //--todo--
   }
 
   @OnEvent(EventRoute.reintegrateSeller)
-  reintegrateSeller(payload: ReintegrateSellerEventPayload) {
-    return this.reintegrateSellerEvent.handle(payload);
+  async reintegrateSeller(payload: ReintegrateSellerEventPayload) {
+    try {
+      await this.reintegrateSellerEvent.handle(payload);
+    } catch (e) {
+      console.log(e);
+    }
+    Logger.log(
+      `RE_INTEGRATE_SELLER_EVENT seller=${payload.data.email}#=${payload.data.password} user_id=${payload.userId}`
+    );
   }
 }

@@ -56,6 +56,7 @@ export class AppService {
         },
       },
     });
+    console.log(user);
     if (user.length === 0)
       throw new HttpException('invalid data sent) 042', HttpStatus.BAD_REQUEST);
 
@@ -70,17 +71,17 @@ export class AppService {
     ) {
       throw new HttpException('x_X', HttpStatus.BAD_REQUEST);
     }
-    const rival = await this.rivalConfigRepository.findOne({
+    let rival = await this.rivalConfigRepository.findOne({
       where: {
         seller: { id: payload.sellerId, user: { hash: payload.hash } },
         id: payload.id,
       },
-      relations: { seller: true },
+      relations: { seller: { user: true } },
     });
     if (!rival || !rival.seller) {
       throw new HttpException('not found', HttpStatus.NOT_FOUND);
     }
-
+    const seller = rival.seller;
     //---todo---
     //Price manipulation
     const minPrice = rival.minPrice || 0;
@@ -91,7 +92,15 @@ export class AppService {
     const oldPrice = priceAccThisSeller?.price || rival.price;
 
     if (minPrice === 0) {
-      rival.price = priceAcc[0].price - 2;
+      if (seller.sysId === priceAcc[0].merchantId) {
+        rival.price = priceAcc[1].price - 2;
+      } else if (seller.sysId === priceAcc[1].merchantId) {
+        rival.price = priceAcc[0].price - 2;
+      } else if (seller.sysId === priceAcc[2].merchantId) {
+        rival.price = priceAcc[0].price - 2;
+      } else {
+        rival.price = priceAcc[0].price - 2;
+      }
     } else {
       if (priceAccThisSeller) {
         rival.price = priceAcc[1].price - 2;
@@ -110,7 +119,8 @@ export class AppService {
       }
     }
     rival.oldPrice = oldPrice;
-    await this.rivalConfigRepository.save(rival);
+    rival.rivalSeller = payload.data;
+    rival = await this.rivalConfigRepository.save(rival);
     return { message: 'ok' };
     //Price manipulation
     //---todo---

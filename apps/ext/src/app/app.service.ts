@@ -92,7 +92,7 @@ export class AppService {
 
     if (minPrice === 0) {
       if (seller.sysId === priceAcc[0].merchantId) {
-        rival.price = priceAcc[1].price - 2;
+        rival.price = priceAcc[1]?.price - 2 || oldPrice + 2;
       } else if (seller.sysId === priceAcc[1].merchantId) {
         rival.price = priceAcc[0].price - 2;
       } else if (seller.sysId === priceAcc[2].merchantId) {

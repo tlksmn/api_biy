@@ -132,4 +132,13 @@ export class SellerService {
       message: 'ok',
     };
   }
+
+  public catchUserIfNotAccessed(user: UserEntity) {
+    if (!user.accessed) {
+      throw new HttpException(
+        'User not accessed to use service, contact to admin& tg@sha_khan',
+        HttpStatus.NOT_FOUND
+      );
+    }
+  }
 }

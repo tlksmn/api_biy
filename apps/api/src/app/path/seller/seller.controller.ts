@@ -23,6 +23,7 @@ export class SellerController {
 
   @Post(SellerRoute.add)
   addSeller(@Body() data: AddSellerDto, @User() user: UserEntity) {
+    this.sellerService.catchUserIfNotAccessed(user);
     return this.sellerService.addSeller(data, user);
   }
 

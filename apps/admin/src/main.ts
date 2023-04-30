@@ -33,7 +33,7 @@ async function bootstrap() {
   app.use(
     rateLimit({
       windowMs: 2 * 60 * 1000, // 2 minutes
-      max: 10, // limit each IP to 10 requests per windowMs
+      max: 20, // limit each IP to 10 requests per windowMs
     })
   );
   app.enableCors(corsOptions);

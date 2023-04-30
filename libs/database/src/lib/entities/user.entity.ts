@@ -18,6 +18,9 @@ export class UserEntity extends AEntity {
   @Column({ default: false })
   activated: boolean;
 
+  @Column({ default: false })
+  accessed: boolean;
+
   @Column({ nullable: true })
   name: string;
 

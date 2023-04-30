@@ -6,6 +6,7 @@ export type UserT = AT & {
   password: string;
   phone: string;
   activated: boolean;
+  accessed: boolean;
   name: string;
   hash: string;
   sellers: SellerT[];

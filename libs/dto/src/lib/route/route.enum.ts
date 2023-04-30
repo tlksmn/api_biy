@@ -53,5 +53,6 @@ export enum ExtensionRoute {
 export enum AdminRoute {
   path = 'admin',
   list = 'list',
+  delete = 'delete',
   update = 'update',
 }

@@ -9,4 +9,8 @@ export class UpdateUserDto extends GetUsersDto {
   @IsNotEmpty()
   @IsBoolean()
   activated: boolean;
+
+  @IsNotEmpty()
+  @IsBoolean()
+  accessed: boolean;
 }

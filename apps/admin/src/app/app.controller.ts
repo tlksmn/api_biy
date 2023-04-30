@@ -7,7 +7,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { AdminRoute } from '@biy/dto';
+import { AdminRoute, DeleteUserDto } from '@biy/dto';
 import { UpdateUserDto } from '@biy/dto';
 
 import { AppService } from './app.service';
@@ -34,6 +34,12 @@ export class AppController {
   updateUser(@Body() data: UpdateUserDto) {
     this.checkPassword(data.pass);
     return this.appService.updateUser(data);
+  }
+
+  @Post(AdminRoute.delete)
+  deleteUser(@Body() data: DeleteUserDto) {
+    this.checkPassword(data.pass);
+    return this.appService.deleteUser(data);
   }
 
   private checkPassword(password: string) {

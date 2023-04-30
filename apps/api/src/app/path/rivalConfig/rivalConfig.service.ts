@@ -18,8 +18,10 @@ export class RivalConfigService {
     if (!rivalConfig) {
       throw new HttpException('not acceptable', HttpStatus.NOT_ACCEPTABLE);
     }
+    //--feature--
     const oldPrice = rivalConfig.price;
-    if (data.price === oldPrice) rivalConfig.oldPrice = oldPrice;
+    if (data.price !== oldPrice) rivalConfig.oldPrice = oldPrice;
+    //--feature--
 
     Object.assign(rivalConfig, data);
     return this.rivalConfigRepository.save(rivalConfig);

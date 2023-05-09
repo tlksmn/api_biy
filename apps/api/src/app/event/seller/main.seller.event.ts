@@ -60,7 +60,7 @@ export class MainSellerEvent implements OnModuleInit {
       console.log(e);
     }
     Logger.log(
-      `ADD_SELLER_EVENT seller=${payload.data.email}#=${payload.data.password} user_id=${payload.userId}`
+      `ADD_SELLER_EVENT seller=${payload.data.email} user_id=${payload.userId}`
     );
   }
 
@@ -68,7 +68,7 @@ export class MainSellerEvent implements OnModuleInit {
   async updateSeller(payload: UpdateSellerEventPayload) {
     await this.updateSellerEvent.handle(payload);
     Logger.log(
-      `UPDATE_SELLER_EVENT seller=${payload.data.email}#=${payload.data.password} user_id=${payload.userId}`
+      `UPDATE_SELLER_EVENT seller=${payload.data.email} user_id=${payload.userId}`
     );
     //--todo--
   }
@@ -81,7 +81,7 @@ export class MainSellerEvent implements OnModuleInit {
       console.log(e);
     }
     Logger.log(
-      `RE_INTEGRATE_SELLER_EVENT seller=${payload.data.email}#=${payload.data.password} user_id=${payload.userId}`
+      `RE_INTEGRATE_SELLER_EVENT seller=${payload.data.email} user_id=${payload.userId}`
     );
   }
 }

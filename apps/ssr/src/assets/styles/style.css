@@ -1,0 +1,115 @@
+body {
+  font-size: 18px;
+  font-style: normal;
+  font-family: Georgia, serif;
+  user-select: none;
+  scroll-behavior: auto;
+  color: #424242;
+}
+
+.content {
+  margin: 0 auto;
+  max-width: 60em;
+  user-select: none;
+  padding: 4em 0;
+}
+
+@media (max-width: 600px) {
+  .content {
+    padding: 0 0 2em 0;
+  }
+  .content .container > * {
+    padding: 0 1em;
+  }
+}
+.content .header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-around;
+  background: #3787FF;
+  color: beige;
+  position: sticky;
+  top: 0;
+  box-shadow: 0 0 16px 5px rgba(34, 60, 80, 0.2);
+}
+
+.content .header .elem:hover {
+  background: #468eff;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.content .header .elem {
+  padding: 1em 0.5em;
+  color: white;
+  text-decoration: none;
+}
+
+.content .header .elem.sm {
+  display: flex;
+  gap: 0.4em;
+}
+
+.content .header .elem.sm svg {
+  min-width: 1.2em;
+  min-height: 1.2em;
+}
+
+.content .header .elem.sm:hover {
+  background: inherit;
+  color: inherit;
+}
+
+.content .container .row {
+  padding: 8em 0.5em 0 0.5em;
+  text-align:justify;
+}
+.content .container .row:hover {
+  color: black;
+}
+
+.content .container .img{
+  max-width: 90vw;
+  max-height: 70vh;
+  padding: 1em 0 1em 0.5em;
+}
+
+.content .container #price .list{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2em;
+  justify-content: center;
+  align-items: center;
+}
+
+.content .container #price .list .el {
+  max-width: 15em;
+  padding: 1em;
+  border: 1px solid #dcdcdc;
+  border-radius: 4%;
+  box-shadow: 0 0 4px 2px rgba(34, 60, 80, 0.2);
+}
+.content .container #price .list .el:hover {
+  box-shadow: 0 0 10px 4px rgba(34, 60, 80, 0.2);
+  color: black;
+  position: relative;
+  bottom: 0.2em;
+  /*margin-right: 0.1em;*/
+}
+.content .container #price .list .el .action {
+  padding-top: 1em;
+  display: flex;
+  justify-content: center;
+}
+.content .container #price .list .el .action a{
+  padding: 0.6em;
+  text-decoration: none;
+  border: 1px solid rgba(220, 220, 220, 0.55);
+  background: red;
+  color: whitesmoke;
+  border-radius: 0.4em;
+}
+.content .container #price .list .el .name{
+  font-weight: 600;
+}

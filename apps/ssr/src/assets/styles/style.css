@@ -231,3 +231,8 @@ body {
 .content .container #try ul li a:hover {
   text-decoration: underline;
 }
+
+.content .container #questions ul {
+  padding: 1em;
+  list-style: square;
+}

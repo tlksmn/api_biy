@@ -213,3 +213,20 @@ body {
     font-size: 1.4em;
   }
 }
+
+.content .container #try ul {
+  list-style: circle;
+}
+
+.content .container #try ul li a {
+  padding-left: 0.2em;
+  padding-right: 0.2em;
+  color: #001c56;
+  text-decoration: none;
+}
+.content .container #try ul ul {
+ padding: 0.5em 1em;
+}
+.content .container #try ul li a:hover {
+  text-decoration: underline;
+}

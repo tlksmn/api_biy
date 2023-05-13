@@ -215,6 +215,7 @@ body {
 }
 
 .content .container #try ul {
+  padding-left: 1em;
   list-style: circle;
 }
 

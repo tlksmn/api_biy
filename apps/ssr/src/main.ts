@@ -15,7 +15,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.set('views', path.join(__dirname, 'view'));
   app.set('view engine', 'pug');
-  app.use(express.static(path.join(__dirname, 'assets')));
+  app.use('/assets', express.static(path.join(__dirname, 'assets')));
   const port = process.env.PORT || 3004;
   await app.listen(port);
   Logger.log(`🚀 Application is running on: http://localhost:${port}/`);

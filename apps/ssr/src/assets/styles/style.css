@@ -38,7 +38,7 @@ body {
 }
 
 .content .header .elem:hover {
-  background: #468eff;
+  background: rgb(87, 134, 197);
   color: #ffffff;
   font-weight: 500;
 }

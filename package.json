@@ -8,6 +8,7 @@
     "prod:file": "NODE_ENV=prod node dist/apps/file/main.js",
     "prod:ext": "NODE_ENV=prod node dist/apps/ext/main.js",
     "prod:admin": "NODE_ENV=prod node dist/apps/admin/main.js",
+    "prod:ssr": "NODE_ENV=prod node dist/apps/ssr/main.js",
     "build": "nx build",
     "test": "nx test"
   },

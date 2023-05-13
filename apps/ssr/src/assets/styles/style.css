@@ -69,6 +69,13 @@ body {
   text-align: justify;
 }
 
+.content .container .row .h{
+  font-size: 1.2em;
+  padding-bottom: 0.3em;
+  font-style: italic;
+  font-weight: 0;
+}
+
 .content .container .row:hover {
   color: black;
 }

@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
+Disallow:
+Crawl-delay: 5
 
 Sitemap: https://biy.kz/sitemap_index.xml
 User-agent: Googlebot
@@ -34,6 +36,4 @@ User-agent: psbot
 Disallow:
 User-agent: yahoo-blogs/v3.9
 Disallow:
-User-agent: *
-Disallow:
-Crawl-delay: 5
+

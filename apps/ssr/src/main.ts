@@ -5,12 +5,12 @@
 
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-
-import { AppModule } from './app/app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import * as path from 'path';
 import * as express from 'express';
 import helmet from 'helmet';
+
+import { AppModule } from './app/app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);

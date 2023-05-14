@@ -55,8 +55,8 @@ body {
 }
 
 .content .header .elem.sm svg {
-  min-width: 1.2em;
-  min-height: 1.2em;
+  width: 1.2em;
+  height: 1.2em;
 }
 
 .content .header .elem.sm:hover {
@@ -184,8 +184,8 @@ body {
 }
 
 .content .container #contact .el-contact svg {
-  max-width: 1em;
-  max-height: 1em;
+  width: 1em;
+  height: 1em;
 }
 
 .content .container #contact .el-contact a {

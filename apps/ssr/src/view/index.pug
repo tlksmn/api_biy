@@ -71,6 +71,9 @@ block body
           li Устанавиливете хром-расширение
             a(href="https://chrome.google.com/webstore/detail/biy-standard/nplpolmjhoeefjnloladiknpdfobfdkn" target="_blank") Biy Standard
             span и начинаете самостояльный обход)
+            ul
+              li
+                a(href="https://chrome.google.com/webstore/detail/biy-standard/nplpolmjhoeefjnloladiknpdfobfdkn" target="_blank") Biy Standard
           li Обычная частота 80 товаров в миниуту.
 
       #price.row
@@ -81,8 +84,12 @@ block body
               img(src="/assets/pictures/apriori.webp" alt="apriori test package biy.kz")
             div.name Apriori Test
             div.price
-              p ₸1,999.00
-              p ₸1,999.00
+              .first-price
+                include svg/tenge.svg
+                div 1,999.00
+              .first-price
+                include svg/tenge.svg
+                div 1,999.00
             div.description
               //.text Proin fringilla egestas neque. Morbi a nunc at nibh tempus rhoncus. Fusce dapibus, mi vel scelerisque porta, mauris nisi pulvinar mi, eget blandit odio dui eget urna.
               .detail-list
@@ -122,8 +129,13 @@ block body
               img(src="/assets/pictures/standard.webp" alt="biy.kz standard package logo")
             div.name Standard
             div.price
-              p ₸14,999.00
-              p ₸12,000.00
+              div.price
+                .first-price
+                  include svg/tenge.svg
+                  div 14,999.00
+                .first-price
+                  include svg/tenge.svg
+                  div 12,000.00
             div.description
               //.text Proin fringilla egestas neque. Morbi a nunc at nibh tempus rhoncus. Fusce dapibus, mi vel scelerisque porta, mauris nisi pulvinar mi, eget blandit odio dui eget urna.
               .detail-list
@@ -164,8 +176,12 @@ block body
               img(src="/assets/pictures/comfort.webp" alt="biy.kz comfort package logo")
             div.name Comfort
             div.price
-              p ₸39,999.00
-              p ₸32,000.00
+              .first-price
+                include svg/tenge.svg
+                div 39,999.00
+              .first-price
+                include svg/tenge.svg
+                div 32,000.00
             div.description
               //.text Proin fringilla egestas neque. Morbi a nunc at nibh tempus rhoncus. Fusce dapibus, mi vel scelerisque porta, mauris nisi pulvinar mi, eget blandit odio dui eget urna.
               .detail-list
@@ -206,8 +222,12 @@ block body
               img(src="/assets/pictures/business.webp" alt="biy.kz business package logo")
             div.name Business
             div.price
-              p ₸79,999.00
-              p ₸72,000.00
+              .first-price
+                include svg/tenge.svg
+                div 79,999.00
+              .first-price
+                include svg/tenge.svg
+                div 72,000.00
             div.description
               //.text Proin fringilla egestas neque. Morbi a nunc at nibh tempus rhoncus. Fusce dapibus, mi vel scelerisque porta, mauris nisi pulvinar mi, eget blandit odio dui eget urna.
               .detail-list
@@ -247,8 +267,12 @@ block body
               img(src="/assets/pictures/elite.webp" alt="biy.kz elite package logo")
             div.name Elite
             div.price
-              p ₸99,999.00
-              p ₸92,000.00
+              .first-price
+                include svg/tenge.svg
+                div 99,999.00
+              .first-price
+                include svg/tenge.svg
+                div 92,000.00
             div.description
               //.text Proin fringilla egestas neque. Morbi a nunc at nibh tempus rhoncus. Fusce dapibus, mi vel scelerisque porta, mauris nisi pulvinar mi, eget blandit odio dui eget urna.
               .detail-list
@@ -329,13 +353,17 @@ block body
           li Да, оплата производится на 30 калндарных дней.
         ul
           li Мои данные в сохранности?
-          li Да, ващи некоторые данные шифруются и в целом находятся в безопасности.
+          li Да, ваши некоторые данные шифруются и в целом находятся в безопасности.
         ul
           li Есть ли возможность получать заказы с вашего сайта?
-          li На данный момент мы продумываем некоторые детали, в телеграм канале публикуются новости, подпишитесь чтобы быть в курсе новинок платформы biy.kz
+          li На данный момент мы продумываем некоторые детали, в телеграмм канале публикуются новости, подпишитесь чтобы быть в курсе новостей платформы biy.kz
         ul
           li Производится подключение за месяц? И сумма включает сколько продавцов?
           li Идет подключение на 30 календарных дней, и сумма включает только одну учетную запись продавца.
         ul
-          li
-          li
+          li Можно ли подключать кроме сущестующих учетных записей новые аккаунты?
+          li Да, прежде чем добавлять новые учетные записи проконсультируйтесь с администратором чтобы получить доступ.
+      #end.row
+        .svg
+          include svg/copyright.svg
+        h1 Copyright. Все права защищены. Проконсультируйтесь с автором.
